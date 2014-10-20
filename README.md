@@ -14,7 +14,7 @@ A [Plug.dj](https://plug.dj/) bot which allow you to do multiple moderations act
 * __!commands__: Show a link to this readme.
 * __!skip__: Forceskip the song if your rank is highest than Resident DJ (___Bouncer to Host___). If you're not, start a vote to skip (___None to Resident DJ___).
 * __!link__: Send the link of the current song in the chat (___Current DJ or Resident DJ to Host___).
-* __!ban___(username[,time,reason])_: Ban an user. __Time__ should only be __h__ _for an hour (60minutes)_, __d__ _for a day (24hours)_ or __f__ _forever (Long long time)_. __Reason__ should only be __spam/troll/abuse/offensive/badsong/badtheme/negative__. Default time is Forever and default reason is Spam/Troll. (___Manager to Host___).
+* __!ban__ _(username[,time,reason])_: Ban an user. __Time__ should only be __h__ _for an hour (60minutes)_, __d__ _for a day (24hours)_ or __f__ _forever (Long long time)_. __Reason__ should only be __spam/troll/abuse/offensive/badsong/badtheme/negative__. Default time is Forever and default reason is Spam/Troll. (___Manager to Host___).
 * __!restart__: Restart the bot (Don't work if the bot crashed). (___Manager to Host___).
 
 _New commands are coming soon, let me know if you want another command._
