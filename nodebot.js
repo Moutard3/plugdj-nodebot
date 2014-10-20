@@ -104,7 +104,13 @@ function command(cmd,args,un,uid,cid, rank) {
                     }
                 }
             }
-            bot.moderateBanUser(args[0], reason, time);
+            bot.moderateBanUser(getUser(args[0]).id, reason, time);
+        }
+    }
+    // ======================================== UNBAN
+    else if(cmd.toLowerCase() === "unban" && rank>2) {
+        if(typeof args[0] == "string" && checkForBannedUser(args[0])) {
+            bot.moderateUnbanUser(getBannedUser(args[0]).id);
         }
     }
     // ======================================== RESTART
@@ -123,11 +129,29 @@ function checkForUser(u) {
     }
     return false;
 }
+// Check if user is banned by username
+function checkForBannedUser(u) {
+    for (var key in API.getBannedUsers()) {
+        if(API.getBannedUsers()[key].username.toLowerCase().indexOf(u.toLowerCase()) !== -1) {
+            return true;
+        }
+    }
+    return false;
+}
 // Get user info by username
 function getUser(u) {
     for (var key in bot.getUsers()) {
         if(bot.getUsers()[key].username.toLowerCase().indexOf(u.toLowerCase()) !== -1) {
             return bot.getUsers()[key];
+        }
+    }
+    return null;
+}
+// Get banned user info by username
+function getBannedUser(u) {
+    for (var key in API.getBannedUsers()) {
+        if(API.getBannedUsers()[key].username.toLowerCase().indexOf(u.toLowerCase()) !== -1) {
+            return API.getBannedUsers()[key];
         }
     }
     return null;
