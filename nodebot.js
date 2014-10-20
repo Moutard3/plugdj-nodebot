@@ -1,8 +1,9 @@
 var PlugAPI = require('plugapi');
 var logger = PlugAPI.getLogger('Bot');
 
-var voteSkip=0,skippers="", dj=null;
+var voteSkip=0,skippers="",dj=null,tmrCommands;
 var ROOM = "";
+var botname = "NodeBot";
 
 /* === Login to Room === */
 var bot = new PlugAPI({
@@ -16,11 +17,10 @@ bot.connect(ROOM);
 /* === Events Handling === */
 bot.on('roomJoin', function(room) {
     logger.info("Succefully joined "+room);
-    bot.sendChat("Succefully started CrazyKiwixBot. Type !commands for a list of commands");
+    bot.sendChat("Succefully started "+botname+". Type !commands for a list of commands");
 });
-var reconnect = function() { bot.connect(ROOM); };
-bot.on('close', reconnect);
-bot.on('error', reconnect);
+bot.on('close', function(){bot.connect(ROOM);});
+bot.on('error', function(){bot.connect(ROOM);});
 bot.on('chat', function (msg) {
     if(msg.command != undefined) {
         command(msg.command, msg.args, msg.from.username, msg.from.id, msg.id, msg.from.role);
@@ -40,11 +40,14 @@ bot.on('userLeave', function(usr) {
 
 /* === Commands === */
 function command(cmd,args,un,uid,cid, rank) {
-    if(bot.getDJ() != null) {
-        var dj = bot.getDJ().id;
+    // ======================================== COMMANDS
+    if (cmd.toLowerCase() === "commands" && tmrCommands === 0) {
+        bot.sendChat("A full list of command is available here: https://github.com/Moutard3/plugdj-nodebot/blob/master/README.md#list-of-commands");
+        tmrCommands = 1;
+        setTimeout(function(){ tmrCommands = 0; }, 300000);
     }
     // ======================================== SKIP
-    if(cmd.toLowerCase() === "skip" && dj != null) {
+    else if(cmd.toLowerCase() === "skip" && dj != null) {
         if(rank>1) {
             bot.moderateForceSkip();
         } else if(bot.getUsers().length>4) {
@@ -75,7 +78,7 @@ function command(cmd,args,un,uid,cid, rank) {
         }
     }
     // ======================================== BAN (username, time, reason)
-    else if(cmd.toLowerCase() === "ban") {
+    else if(cmd.toLowerCase() === "ban" && rank>2) {
         var time = -1;
         var reason = 1;
         if(typeof args[0] == "string" && checkForUser(args[0])) {
@@ -103,6 +106,11 @@ function command(cmd,args,un,uid,cid, rank) {
             }
             bot.moderateBanUser(args[0], reason, time);
         }
+    }
+    // ======================================== RESTART
+    else if(cmd.toLowerCase() === "restart" && rank>2) {
+        bot.close();
+        bot.connect(ROOM);
     }
 }
 
