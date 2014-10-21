@@ -4,7 +4,7 @@ var logger = PlugAPI.getLogger('Bot');
 var voteSkip=0,skippers="",dj=null,tmrCommands=0;
 var ROOM = "";
 var botname = "NodeBot";
-var crashonrestart = false; // Use it when your script automatically restart after crash, so the script reload when !restart is send.
+var crashonrestart = true; // Use it when your script automatically restart after crash, so the script reload when !restart is send.
 
 /* === Login to Room === */
 var bot = new PlugAPI({
@@ -38,15 +38,100 @@ bot.on('userLeave', function(usr) {
         voteSkip--;
     }
 });
+bot.on('modBan', function(ban) {
+    switch(ban.duration) {
+        case 60:
+            strTime = "an hour";
+            break
+        case 1440:
+            strTime = "a day";
+            break
+        default:
+            strTime = "permanent";
+    }
+    switch(ban.reason) {
+        case 2:
+            strReason = "offensive/abusive language";
+            break
+        case 3:
+            strReason = "bad quality songs";
+            break
+        case 4:
+            strReason = "bad theme songs";
+            break
+        case 5:
+            strReason = "negative attitude";
+            break
+        default:
+            strReason = "Spam/Troll";
+    }
+    bot.sendChat(ban.username+" has been banned "+strTime+" because of "+strReason+".");
+});
 
 /* === Commands === */
 function command(cmd,args,un,uid,cid, rank) {
     var dj = bot.getDJ();
+    // ======================================== BAN (username, time, reason)
+    if(cmd.toLowerCase() === "ban" && rank>2) {
+        var time = "f";
+        var reason = 1;
+        if(typeof args[0] === "string" && checkForUser(args[0])) {
+            t = args[1];
+            if(t != "f" && t != "d" && t != "h") {
+                time = "f";
+            } else {
+                time = t;
+            }
+            
+            if(typeof(args[2]) == "number" && args[2]<6 && args[2]>0) {
+                var reason = args[2];
+            } else if(typeof(args[2]) === "string") {
+                r = args[2].toLowerCase();
+                if(r === "abuse" || r === "offensive") {
+                    reason = 2;
+                } else if(r === "badsong") {
+                    reason = 3
+                } else if(r === "badtheme") {
+                    reason = 4;
+                } else if(r === "negative") {
+                    reason = 5;
+                } else {
+                    reason = 1;
+                }
+            }
+            
+            bot.moderateBanUser(getUser(args[0]).id, reason, time);
+        }
+    }
     // ======================================== COMMANDS
-    if (cmd.toLowerCase() === "commands" && tmrCommands === 0) {
+    else if (cmd.toLowerCase() === "commands" && tmrCommands === 0) {
         bot.sendChat("A full list of command is available here: https://github.com/Moutard3/plugdj-nodebot/blob/master/README.md#list-of-commands");
         tmrCommands = 1;
         setTimeout(function(){ tmrCommands = 0; }, 300000);
+    }
+    // ======================================== LINK
+    else if(cmd.toLowerCase() === "link") {
+        if(dj === uid || rank>0) {
+            media = bot.getMedia();
+            if(media.format === 1) {
+                var linkToSong = "https://www.youtube.com/watch?v=" + media.cid;
+                bot.sendChat("Current song link: "+linkToSong);
+            }
+            else if(media.format === 2) {
+                SC.get('/tracks/' + media.cid, function (sound) {
+                    bot.sendChat("Current song link: "+sound.permalink_url);
+                });
+            }
+        }
+    }
+    // ======================================== RESTART
+    else if(cmd.toLowerCase() === "restart" && rank>2) {
+        bot.close();
+        bot.connect(ROOM);
+            
+        if(crashonrestart === true) {
+            throw "Triggering restart";
+        }
     }
     // ======================================== SKIP
     else if(cmd.toLowerCase() === "skip" && dj != null) {
@@ -64,64 +149,10 @@ function command(cmd,args,un,uid,cid, rank) {
             }
         }
     }
-    // ======================================== LINK
-    else if(cmd.toLowerCase() === "link") {
-        if(dj === uid || rank>0) {
-            media = bot.getMedia();
-            if(media.format === 1) {
-                var linkToSong = "https://www.youtube.com/watch?v=" + media.cid;
-                bot.sendChat("Current song link: "+linkToSong);
-            }
-            else if(media.format === 2) {
-                SC.get('/tracks/' + media.cid, function (sound) {
-                    bot.sendChat("Current song link: "+sound.permalink_url);
-                });
-            }
-        }
-    }
-    // ======================================== BAN (username, time, reason)
-    else if(cmd.toLowerCase() === "ban" && rank>2) {
-        var time = -1;
-        var reason = 1;
-        if(typeof args[0] == "string" && checkForUser(args[0])) {
-            if(args[1] !== undefined && typeof(args[1]) == "number") {
-                var time = args[1];
-            }
-            if(args[2] !== undefined) {
-                if(typeof(args[2]) == "number" && args[2]<6 && args[2]>0) {
-                    var reason = args[2];
-                }
-                if(typeof(args[2]) == "string") {
-                    r = args[2].toLowerCase();
-                    if(r === "spam" || r === "troll") {
-                        reason = 1;
-                    } else if(r === "abuse" || r === "offensive") {
-                        reason = 2;
-                    } else if(r === "badsong") {
-                        reason = 3
-                    } else if(r === "badtheme") {
-                        reason = 4;
-                    } else if(r === "negative") {
-                        reason = 5;
-                    }
-                }
-            }
-            bot.moderateBanUser(getUser(args[0]).id, reason, time);
-        }
-    }
     // ======================================== UNBAN
     else if(cmd.toLowerCase() === "unban" && rank>2) {
-        if(typeof args[0] == "string" && checkForBannedUser(args[0])) {
+        if(typeof args[0] === "string" && checkForBannedUser(args[0])) {
             bot.moderateUnbanUser(getBannedUser(args[0]).id);
-        }
-    }
-    // ======================================== RESTART
-    else if(cmd.toLowerCase() === "restart" && rank>2) {
-        bot.close();
-        bot.connect(ROOM);
-            
-        if(crashonrestart === true) {
-            throw "Triggering restart";
         }
     }
 }
