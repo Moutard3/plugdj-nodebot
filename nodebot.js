@@ -1,9 +1,10 @@
 var PlugAPI = require('plugapi');
 var logger = PlugAPI.getLogger('Bot');
 
-var voteSkip=0,skippers="",dj=null,tmrCommands;
+var voteSkip=0,skippers="",dj=null,tmrCommands=0;
 var ROOM = "";
 var botname = "NodeBot";
+var crashonrestart = false; // Use it when your script automatically restart after crash, so the script reload when !restart is send.
 
 /* === Login to Room === */
 var bot = new PlugAPI({
@@ -40,6 +41,7 @@ bot.on('userLeave', function(usr) {
 
 /* === Commands === */
 function command(cmd,args,un,uid,cid, rank) {
+    var dj = bot.getDJ();
     // ======================================== COMMANDS
     if (cmd.toLowerCase() === "commands" && tmrCommands === 0) {
         bot.sendChat("A full list of command is available here: https://github.com/Moutard3/plugdj-nodebot/blob/master/README.md#list-of-commands");
@@ -48,7 +50,7 @@ function command(cmd,args,un,uid,cid, rank) {
     }
     // ======================================== SKIP
     else if(cmd.toLowerCase() === "skip" && dj != null) {
-        if(rank>1) {
+        if(rank>1 || uid === dj.id) {
             bot.moderateForceSkip();
         } else if(bot.getUsers().length>4) {
             if(skippers.indexOf(uid) === -1) {
@@ -117,6 +119,10 @@ function command(cmd,args,un,uid,cid, rank) {
     else if(cmd.toLowerCase() === "restart" && rank>2) {
         bot.close();
         bot.connect(ROOM);
+            
+        if(crashonrestart === true) {
+            throw "Triggering restart";
+        }
     }
 }
 
