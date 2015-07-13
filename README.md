@@ -5,12 +5,12 @@ A [Plug.dj](https://plug.dj/) bot which allow you to do multiple moderations act
 
 ##How to use it ?
 * The bot needs [Node.js](http://nodejs.org/) to work.
-* The bot uses [PlugAPI](https://github.com/plugCubed/plugAPI) so you'll need it before running the bot. Don't use the NPM version of PlugAPI as it isn't updated yet.
+* The bot uses [PlugAPI](https://github.com/plugCubed/plugAPI) so you'll need it before running the bot.
 * After it, you need to download the bot. The entire bot is in the nodebot.js
 * Now, open the nodebot.js file and add the name of your room (only the name __without the /__ ), the email of the bot account and it password.
 * The bot should now be connected to your room and will detect commands starting by __!__
 
-___Note___: If you want to automatically restart the bot on crash, you can use [forever](https://github.com/indexzero/forever).
+___Note___: If you want to automatically restart the bot on crash, you can use [forever](https://github.com/indexzero/forever) or [pm2](https://github.com/Unitech/pm2).
 
 ##List of commands
 * __!ban__ _(username[,time,reason])_: Ban an user. __Time__ should only be __h__ _for an hour (60minutes)_, __d__ _for a day (24hours)_ or __f__ _forever (Long long time)_. __Reason__ should only be __spam/troll/abuse/offensive/badsong/badtheme/negative__. Default time is Forever and default reason is Spam/Troll. (___Manager to Host___).

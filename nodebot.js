@@ -1,10 +1,10 @@
 var PlugAPI = require('plugapi');
-var logger = PlugAPI.getLogger('Bot');
+var logger = PlugAPI.CreateLogger('Bot');
 
 var voteSkip=0,skippers="",dj=null,tmrCommands=0;
-var ROOM = "";
+var ROOM = ""; // Room name here (https://plug.dj/crazy-kiwix will be crazy-kiwix)
 var botname = "NodeBot";
-var crashonrestart = true; // Use it when your script automatically restart after crash, so the script reload when !restart is send.
+var crashonrestart = true; // Use it if your script automatically restart after crash, the script will crash when !restart is send and then restart.
 
 /* === Login to Room === */
 var bot = new PlugAPI({
@@ -23,7 +23,7 @@ bot.on('roomJoin', function(room) {
 bot.on('close', function(){bot.connect(ROOM);});
 bot.on('error', function(){bot.connect(ROOM);});
 bot.on('chat', function (msg) {
-    if(msg.command != undefined) {
+    if(msg.command !== undefined) {
         command(msg.command, msg.args, msg.from.username, msg.from.id, msg.id, msg.from.role);
     }
 });
@@ -42,26 +42,26 @@ bot.on('modBan', function(ban) {
     switch(ban.duration) {
         case 60:
             strTime = "an hour";
-            break
+            break;
         case 1440:
             strTime = "a day";
-            break
+            break;
         default:
             strTime = "permanent";
     }
     switch(ban.reason) {
         case 2:
             strReason = "offensive/abusive language";
-            break
+            break;
         case 3:
             strReason = "bad quality songs";
-            break
+            break;
         case 4:
             strReason = "bad theme songs";
-            break
+            break;
         case 5:
             strReason = "negative attitude";
-            break
+            break;
         default:
             strReason = "Spam/Troll";
     }
@@ -84,7 +84,7 @@ function command(cmd,args,un,uid,cid, rank) {
             }
             
             if(typeof(args[2]) == "number" && args[2]<6 && args[2]>0) {
-                var reason = args[2];
+                reason = args[2];
             } else if(typeof(args[2]) === "string") {
                 r = args[2].toLowerCase();
                 if(r === "abuse" || r === "offensive") {
@@ -134,7 +134,7 @@ function command(cmd,args,un,uid,cid, rank) {
         }
     }
     // ======================================== SKIP
-    else if(cmd.toLowerCase() === "skip" && dj != null) {
+    else if(cmd.toLowerCase() === "skip" && dj !== null) {
         if(rank>1 || uid === dj.id) {
             bot.moderateForceSkip();
         } else if(bot.getUsers().length>4) {
@@ -159,7 +159,7 @@ function command(cmd,args,un,uid,cid, rank) {
 
 // Check if user is in room by username
 function checkForUser(u) {
-    for (var key in bot.getUsers()) {
+    for (var key in bot.getUsers()) {
         if(bot.getUsers()[key].username.toLowerCase().indexOf(u.toLowerCase()) !== -1) {
             return true;
         }
@@ -168,7 +168,7 @@ function checkForUser(u) {
 }
 // Check if user is banned by username
 function checkForBannedUser(u) {
-    for (var key in API.getBannedUsers()) {
+    for (var key in API.getBannedUsers()) {
         if(API.getBannedUsers()[key].username.toLowerCase().indexOf(u.toLowerCase()) !== -1) {
             return true;
         }
@@ -177,7 +177,7 @@ function checkForBannedUser(u) {
 }
 // Get user info by username
 function getUser(u) {
-    for (var key in bot.getUsers()) {
+    for (var key in bot.getUsers()) {
         if(bot.getUsers()[key].username.toLowerCase().indexOf(u.toLowerCase()) !== -1) {
             return bot.getUsers()[key];
         }
@@ -186,7 +186,7 @@ function getUser(u) {
 }
 // Get banned user info by username
 function getBannedUser(u) {
-    for (var key in API.getBannedUsers()) {
+    for (var key in API.getBannedUsers()) {
         if(API.getBannedUsers()[key].username.toLowerCase().indexOf(u.toLowerCase()) !== -1) {
             return API.getBannedUsers()[key];
         }
