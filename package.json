@@ -1,0 +1,33 @@
+{
+  "name": "plugdj-nodebot",
+  "version": "0.0.2",
+  "description": "A bot for PlugDj which help to manage the room even when no mods are presents.",
+  "main": "nodebot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Moutard3/plugdj-nodebot"
+  },
+  "keywords": [
+    "plug",
+    "dj",
+    "plugdj",
+    "nodebot",
+    "bot",
+    "moderation",
+    "mod",
+    "auto",
+    "automatic"
+  ],
+  "dependencies": {
+    "plugapi": "3.4.0"
+  },
+  "author": "Moutarde <moutardea@gmail.com> (https://github.com/Moutard3)",
+  "license": "GPL-2",
+  "bugs": {
+    "url": "https://github.com/Moutard3/plugdj-nodebot/issues"
+  },
+  "homepage": "https://github.com/Moutard3/plugdj-nodebot"
+}
