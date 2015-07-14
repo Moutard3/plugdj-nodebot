@@ -1,6 +1,8 @@
 plugdj-nodebot
 ==============
 
+[![NPM](https://nodei.co/npm/plugdj-nodebot.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/plugdj-nodebot/)
+
 A [Plug.dj](https://plug.dj/) bot which allow you to do multiple moderations actions faster. It also moderate the room when no admins are here. It is open-source so you can edit it like you want.
 
 ## How to use it ?
