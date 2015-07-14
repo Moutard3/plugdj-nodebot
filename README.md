@@ -6,9 +6,20 @@ plugdj-nodebot
 A [Plug.dj](https://plug.dj/) bot which allow you to do multiple moderations actions faster. It also moderate the room when no admins are here. It is open-source so you can edit it like you want.
 
 ## How to use it ?
+### Using NPM:
+  ```
+  npm install plugdj-nodebot
+  cd node_modules/plugdj-nodebot
+  nodejs nodebot
+  or
+  pm2 start nodebot.js
+  or
+  forever start nodebot.js
+  ```
+### Using Github:
 * The bot needs [Node.js](http://nodejs.org/) to work.
 * The bot uses [PlugAPI](https://github.com/plugCubed/plugAPI) so you'll need it before running the bot.
-* After it, you need to download the bot. The entire bot is in the nodebot.js
+* After that, you need to download the bot. The entire bot is in the nodebot.js
 * Now, open the nodebot.js file and add the name of your room (only the name __without the /__ ), the email of the bot account and it password.
 * The bot should now be connected to your room and will detect commands starting by __!__
 
