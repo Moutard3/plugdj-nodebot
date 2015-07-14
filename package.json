@@ -1,6 +1,6 @@
 {
   "name": "plugdj-nodebot",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A bot for PlugDj which help to manage the room even when no mods are presents.",
   "main": "nodebot.js",
   "scripts": {
