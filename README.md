@@ -23,6 +23,14 @@ A [Plug.dj](https://plug.dj/) bot which allow you to do multiple moderations act
 * Now, open the nodebot.js file and add the name of your room (only the name __without the /__ ), the email of the bot account and it password.
 * The bot should now be connected to your room and will detect commands starting by __!__
 
+_IMPORTANT_: Make sure you've edited the nodebot.js to add the bot's account informations and the room name
+```
+    var ROOM = ""; // Room name here (https://plug.dj/crazy-kiwix will be crazy-kiwix) Line 5
+AND
+    "email": "", // Line 11
+    "password": "" // Line 12
+```
+
 ___Note___: If you want to automatically restart the bot on crash, you can use [forever](https://github.com/indexzero/forever) or [pm2](https://github.com/Unitech/pm2).
 
 ## List of commands
