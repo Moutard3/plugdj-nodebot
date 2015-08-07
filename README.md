@@ -29,6 +29,7 @@ _IMPORTANT_: Make sure you've edited the nodebot.js to add the bot's account inf
 AND
     "email": "", // Line 11
     "password": "" // Line 12
+    // If you have a HTTP 401 error, your user/pass is incorrect
 ```
 
 ___Note___: If you want to automatically restart the bot on crash, you can use [forever](https://github.com/indexzero/forever) or [pm2](https://github.com/Unitech/pm2).

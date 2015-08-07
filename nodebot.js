@@ -4,13 +4,13 @@ var logger = PlugAPI.CreateLogger('Bot');
 var voteSkip=0,skippers="",dj=null,tmrCommands=0;
 var ROOM = ""; // Room name here (https://plug.dj/crazy-kiwix will be crazy-kiwix)
 var botname = "NodeBot";
-var crashonrestart = true; // Use it if your script automatically restart after crash, the script will crash when !restart is send and then restart.
+var crashonrestart = false; // Use it if your script automatically restart after crash, the script will crash when !restart is send and then restart.
 
 /* === Login to Room === */
 var bot = new PlugAPI({
     "email": "",
     "password": ""
-});
+}); // If you have a HTTP 401 error, your user/pass is incorrect
 bot.multiline = true;
 
 bot.connect(ROOM);

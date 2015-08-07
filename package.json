@@ -22,7 +22,7 @@
     "automatic"
   ],
   "dependencies": {
-    "plugapi": "3.4.0"
+    "plugapi": "4.0.1"
   },
   "author": "Moutarde <moutardea@gmail.com> (https://github.com/Moutard3)",
   "license": "GPL-2.0",
