@@ -2,14 +2,13 @@ var PlugAPI = require('plugapi');
 var logger = PlugAPI.CreateLogger('Bot');
 
 var voteSkip=0,skippers="",dj=null,tmrCommands=0;
-var ROOM = ""; // Room name here (https://plug.dj/crazy-kiwix will be crazy-kiwix)
+var ROOM = "foo"; // Room name here (https://plug.dj/foo will be "foo")
 var botname = "NodeBot";
-var crashonrestart = false; // Use it if your script automatically restart after crash, the script will crash when !restart is send and then restart.
 
 /* === Login to Room === */
 var bot = new PlugAPI({
-    "email": "",
-    "password": ""
+    "email": "email@domain.tld",
+    "password": "password"
 }); // If you have a HTTP 401 error, your user/pass is incorrect
 bot.multiline = true;
 
@@ -82,7 +81,7 @@ function command(cmd,args,un,uid,cid, rank) {
             } else {
                 time = t;
             }
-            
+
             if(typeof(args[2]) == "number" && args[2]<6 && args[2]>0) {
                 reason = args[2];
             } else if(typeof(args[2]) === "string") {
@@ -99,7 +98,7 @@ function command(cmd,args,un,uid,cid, rank) {
                     reason = 1;
                 }
             }
-            
+
             bot.moderateBanUser(getUser(args[0]).id, reason, time);
         }
     }
@@ -124,18 +123,9 @@ function command(cmd,args,un,uid,cid, rank) {
             }
         }
     }
-    // ======================================== RESTART
-    else if(cmd.toLowerCase() === "restart" && rank>2) {
-        bot.close();
-        bot.connect(ROOM);
-            
-        if(crashonrestart === true) {
-            throw "Triggering restart";
-        }
-    }
     // ======================================== SKIP
     else if(cmd.toLowerCase() === "skip" && dj !== null) {
-        if(rank>1 || uid === dj.id) {
+        if(rank > 1 || uid === dj.id) {
             bot.moderateForceSkip();
         } else if(bot.getUsers().length>4) {
             if(skippers.indexOf(uid) === -1) {
@@ -193,4 +183,3 @@ function getBannedUser(u) {
     }
     return null;
 }
-
